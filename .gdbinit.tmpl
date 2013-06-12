@@ -28,3 +28,6 @@ target remote localhost:1234
 # for instructions on building GDB with ELF support.
 echo + symbol-file obj/kern/kernel\n
 symbol-file obj/kern/kernel
+# Uncomment the two lines below and comment the two lines above (which are used to debug the kernel) when debugging the boot loader.
+# echo + symbol-file obj/boot/boot.out\n
+# symbol-file obj/boot/boot.out
