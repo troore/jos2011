@@ -24,7 +24,11 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
+	/* *
+	 * added by troore
+	 * */
 	{ "backtrace", "Display debug information about the kernel", mon_backtrace },
+	/* */
 };
 #define NCOMMANDS (sizeof(commands)/sizeof(commands[0]))
 
@@ -61,6 +65,9 @@ int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
 	// Your code here.
+	/* *
+	 * added by troore
+	 * */
 	uint32_t *ebp, *eip;
 	int i;
 
@@ -79,11 +86,13 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 			cprintf((i == 5) ? "\n" : " ");
 		}
 		
-		debuginfo_eip((uintptr_t)eip, &info);
+		if (debuginfo_eip((uintptr_t)eip, &info) < 0)
+			panic("Invalid address found when backtracing\n");
 		cprintf("\t%s:%d: %.*s+%d\n", info.eip_file, info.eip_line, info.eip_fn_namelen, info.eip_fn_name, ((uintptr_t)eip - info.eip_fn_addr));
 
 		ebp = (uint32_t *)*ebp;
 	}
+	/* */
 
 	return 0;
 }
